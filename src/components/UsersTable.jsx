@@ -1,39 +1,63 @@
 import React, {Component} from "react";
-
+import UserDataRow from "./UserDataRow"
 class UsersTable extends Component {
 
     constructor(props) {
         super(props);
-        this.headersMap = {gender: "Gender", name: "Name", email: "Email", dob: "Age", picture: "Picture"}
+        this.headersMap = {gender: "Gender", fullName: "Full name", email: "Email", age: "Age", pictureUrl: "Picture"}
         this.state = {
             users: [],
             isLoading: false,
-            isError: false
+            isError: false,
+            sortBy: "email",
+            isAsc: true
         }
     }
 
     async componentDidMount() {
         this.setState({isLoading: true})
         const resText = await fetch("https://randomuser.me/api/?inc=gender,name,picture,location,dob,email&results=50&seed=abc");
-        console.log(resText)
         const resJson = await resText.json();
-        console.log(resJson)
-        this.setState({users: resJson.results, isLoading: false});
+        const usersObjects = resJson.results.map( (userRawData, index) => {
+            return (
+                {
+                    gender: userRawData.gender,
+                    firstName: userRawData.name.first,
+                    lastName: userRawData.name.last,
+                    fullName: userRawData.name.first.slice(0,1) + "." + userRawData.name.last,
+                    email: userRawData.email,
+                    age: userRawData.dob.age,
+                    pictureUrl: userRawData.picture.medium,
+                    location: '',
+                    key: "user_data_"+ index
+                }
+            )
+        })
+        this.setState({users: usersObjects, isLoading: false});
     }
 
-    sortUsersByColumn = (attr) => {
-        console.log(attr)
-        const newUsers = this.state.users.sort((userA, userB) => {
-            return userA[attr] - userB[attr];
-        })
-        this.setState({users: newUsers});
+    sortUsersByAttribute = (usersArray) => {
+
+        return (
+            [...usersArray].sort((userA, userB) => {
+                const res = (userA[this.state.sortBy] < userB[this.state.sortBy]) ? -1 : ((userA[this.state.sortBy] > userB[this.state.sortBy]) ? 1 : 0)
+                    const sign = this.state.isAsc? 1: -1;
+                    return res * sign;
+            })
+        )
     }
+
+    setSortBy = (attr) => {
+        let isAsc = (attr == this.state.sortBy) ? (!this.state.isAsc) : true;
+        this.setState({sortBy: attr, isAsc: isAsc});
+    }
+
 
     renderTableHeader = () => {
         return Object.keys(this.state.users[0]).map(attr => {
                 const header = this.headersMap[attr];
                 if (header) {
-                    return (<th key={attr} onClick={() => this.sortUsersByColumn(attr)}>{header} </th>)
+                    return (<th key={attr} onClick={() => this.setSortBy(attr)}>{header} </th>)
                 } else
                     return null
             }
@@ -41,17 +65,20 @@ class UsersTable extends Component {
     }
 
     renderTableRows = () => {
-        return this.state.users.map(user => {
+        const newUsers = this.sortUsersByAttribute(this.state.users).map((user,index) => {
             return (
+                // <UserDataRow key = {"userDataRow_"+ index } userData={user} />
                 <tr>
                     <td>{user.gender}</td>
-                    <td>{user.name.first}</td>
+                    <td>{user.fullName}</td>
                     <td>{user.email}</td>
-                    <td>{user.dob.age}</td>
-                    <td><img src={user.picture.medium}/></td>
+                    <td>{user.age}</td>
+                    <td><img src={user.pictureUrl}/></td>
                 </tr>
             )
-        })
+        });
+        console.log(newUsers.map((user) => user.props.userData));
+        return newUsers;
     }
 
     render() {

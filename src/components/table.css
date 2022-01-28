@@ -4,6 +4,9 @@ table {
   width: 100%;
 }
 
+img {
+  border-radius: 50%;
+}
 table td,
 table th {
   border: 1px solid #ddd;
