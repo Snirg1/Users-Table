@@ -6,12 +6,10 @@ class UserDataRow extends Component {
         super(props);
         this.state = {
             gender: props.userData.gender,
-            firstName: props.userData.name.first,
-            lastName: props.userData.name.last,
-            fullName: props.userData.name.first.slice(0,1) + "." + props.userData.name.last,
+            fullName: props.userData.fullName,
             email: props.userData.email,
-            age: props.userData.dob.age,
-            pictureUrl: props.userData.picture.medium,
+            age: props.userData.age,
+            pictureUrl: props.userData.pictureUrl,
             location: ''
         }
     }
