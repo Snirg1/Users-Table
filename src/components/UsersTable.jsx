@@ -5,44 +5,29 @@ class UsersTable extends Component {
 
     constructor(props) {
         super(props);
+        console.log("props: ")
+        console.log(props)
+        this.usersPerPage = 10
+        this.currentPage = props.currentPage
+        this.onSetNextPage = props.onSetNextPage
+        this.onSetPrevPage = props.onSetPrevPage
         this.headersMap = {
-            gender: "Gender", fullName: "Full name", email: "Email", age: "Age", pictureUrl: "Picture"
+            pictureUrl: "Picture", gender: "Gender", fullName: "Full name", email: "Email", age: "Age",
         }
+        console.log(props)
         this.state = {
-            updatedUsersToRender: [],
-            users: [],
+            updatedUsersToRender: props.usersOnPage,
+            users: props.usersOnPage,
             isLoading: false,
             isError: false,
             sortBy: "email",
+            searchBy: "fullName",
             isAsc: true,
-            searchWord: ""
+            searchWord: "",
+            currentPage: 1,
         }
     }
 
-    async componentDidMount() {
-        this.setState({isLoading: true})
-        try {
-            const resText = await fetch("https://randomuser.me/api/?inc=gender,name,picture,location,dob,email&results=50&seed=abc");
-            const resJson = await resText.json();
-            const usersObjects = resJson.results.map((userRawData, index) => {
-                return (
-                    {
-                        gender: userRawData.gender,
-                        firstName: userRawData.name.first,
-                        lastName: userRawData.name.last,
-                        fullName: userRawData.name.first.slice(0, 1) + "." + userRawData.name.last,
-                        email: userRawData.email,
-                        age: userRawData.dob.age,
-                        pictureUrl: userRawData.picture.medium,
-                        location: '',
-                    }
-                )
-            })
-            this.setState({users: usersObjects, updatedUsersToRender: usersObjects, isLoading: false});
-        } catch (error) {
-            //TODO: handle error
-        }
-    }
 
     sortUsersByAttribute = (attr) => {
         const isAsc = (attr === this.state.sortBy) ? (!this.state.isAsc) : true;
@@ -56,7 +41,6 @@ class UsersTable extends Component {
         const sortedUsers = this.state.users.sort(sortFn)
         this.setState({users: sortedUsers, updatedUsersToRender: newUsers, isAsc: isAsc, sortBy: attr});
     }
-
 
     renderTableHeader = () => {
         return Object.keys(this.state.users[0]).map(attr => {
@@ -72,7 +56,7 @@ class UsersTable extends Component {
     }
 
     renderTableRows = () => {
-        const newUsers = this.state.updatedUsersToRender.map((user, index) => {
+        let newUsers = this.state.updatedUsersToRender.map((user, index) => {
             return (
                 <UserDataRow key={"userDataRow_" + user.age + "_" + index} userData={user}/>
                 // we add the user.age to distinct between each component's key
@@ -81,15 +65,17 @@ class UsersTable extends Component {
         return newUsers;
     }
 
-    filterUsersByEmail = (evnt) => {
-        const updatedSearchWord = evnt.target.value
-        const filteredUsers = this.state.users.filter((userData) => {
-            return (userData.email.includes(updatedSearchWord))
+    filterUsersBy = (searchWord, filterBy) => {
+        return this.state.users.filter((userData) => {
+            return (userData[filterBy].toString().toLowerCase().includes(searchWord.toLowerCase())) // return false if the current user should be filtered
         })
+    }
+
+    onSearchWordChange = (evnt) => {
+        const updatedSearchWord = evnt.target.value
+        const filteredUsers = this.filterUsersBy(updatedSearchWord, this.state.searchBy)
         this.setState({updatedUsersToRender: filteredUsers, searchWord: updatedSearchWord})
     }
-    // TODO: Build a general filter function that gets as arg - attr
-
 
     render() {
         const {updatedUsersToRender, isLoading, isError} = this.state;
@@ -102,21 +88,76 @@ class UsersTable extends Component {
         }
         return (
             <div>
-                <input type="text" onChange={(evnt) => this.filterUsersByEmail(evnt)}/>
+                {this.renderTableSearch()}
                 {(updatedUsersToRender.length > 0)
                     ? (
-                        <table>
-                            <thead>
-                            <tr>
-                                {this.renderTableHeader()}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.renderTableRows()}
-                            </tbody>
-                        </table>
+                        <div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    {this.renderTableHeader()}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.renderTableRows()}
+                                </tbody>
+                            </table>
+                            {this.renderTablePagination()}
+                        </div>
                     )
-                    : (<div>No Users</div>)}
+                    : (<h3>No Users</h3>)}
+            </div>
+        )
+    }
+
+    onSearchRadioClicked = (evnt) => {
+        console.log("evnt.target.value: " + evnt.target.value, "this.state.searchWord: " + this.state.searchWord)
+        const newSearchBy = evnt.target.value
+        const filteredUsers = this.filterUsersBy(this.state.searchWord, newSearchBy)
+        this.setState({updatedUsersToRender: filteredUsers, searchBy: newSearchBy})
+    }
+
+    renderTableSearch() {
+        console.log("this.state.searchBy: " + this.state.searchBy)
+        return (
+            <div>
+                <input type="radio" id="name" name="filter-by" value="fullName"
+                       onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "fullName"}/>
+                <label htmlFor="name">Name</label>
+                <input type="radio" id="email" name="filter-by" value="email"
+                       onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "email"}/>
+                <label htmlFor="email">Email</label>
+                <input type="radio" id="age" name="filter-by" value="age"
+                       onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "age"}/>
+                <label htmlFor="age">Age</label>
+                
+                <input type="text" onChange={(evnt) => this.onSearchWordChange(evnt)}/>
+            </div>
+        )
+    }
+
+    getPageButton = (dir) => {
+        return dir === "next" ?
+            <input type="button" name="Next page" value="NextPage"
+                   onClick={this.onSetNextPage}/> :
+            <input type="button" name="Previous page" value="Previous page"
+                   onClick={this.onSetPrevPage}/>
+    }
+
+    renderTablePagination() {
+        return (
+            <div className="pagination-buttons">
+
+                {(this.currentPage > 1) ? (
+                        <div>
+                            {this.getPageButton("prev")}
+                            {this.getPageButton("next")}
+                        </div>
+                    ) :
+                    (<div>
+                        {this.getPageButton("next")}
+                    </div>)}
+                <div className="currPage">-{this.currentPage}-</div>
             </div>
         )
     }

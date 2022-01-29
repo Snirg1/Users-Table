@@ -17,7 +17,6 @@ class UserDataRow extends Component {
 
     render() {
         const {gender, fullName, email, age, pictureUrl } = this.state
-
         return (
             <tr>
                 <td>{gender}</td>
