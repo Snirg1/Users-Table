@@ -5,21 +5,17 @@ class UsersTable extends Component {
 
     constructor(props) {
         super(props);
-        console.log("props: ")
-        console.log(props)
         this.usersPerPage = 10
         this.currentPage = props.currentPage
         this.onSetNextPage = props.onSetNextPage
         this.onSetPrevPage = props.onSetPrevPage
+        this.onUserDataRowClicked = props.onUserDataRowClicked
         this.headersMap = {
             pictureUrl: "Picture", gender: "Gender", fullName: "Full name", email: "Email", age: "Age",
         }
-        console.log(props)
         this.state = {
             updatedUsersToRender: props.usersOnPage,
             users: props.usersOnPage,
-            isLoading: false,
-            isError: false,
             sortBy: "email",
             searchBy: "fullName",
             isAsc: true,
@@ -44,8 +40,8 @@ class UsersTable extends Component {
 
     renderTableHeader = () => {
         return Object.keys(this.state.users[0]).map(attr => {
-                const header = this.headersMap[attr];
-                const onClickFn = ["gender", "pictureUrl"].includes(attr) ? () => {
+            const header = this.headersMap[attr];
+            const onClickFn = ["gender", "pictureUrl"].includes(attr) ? () => {
                 } : () => this.sortUsersByAttribute(attr)
                 if (header) {
                     return (<th key={attr} onClick={onClickFn}>{header} </th>)
@@ -58,7 +54,10 @@ class UsersTable extends Component {
     renderTableRows = () => {
         let newUsers = this.state.updatedUsersToRender.map((user, index) => {
             return (
-                <UserDataRow key={"userDataRow_" + user.age + "_" + index} userData={user}/>
+                <UserDataRow key={"userDataRow_" + user.age + "_" + index}
+                             userData={user}
+                             onUserDataRowClicked={this.onUserDataRowClicked}
+                />
                 // we add the user.age to distinct between each component's key
             )
         });
@@ -80,12 +79,6 @@ class UsersTable extends Component {
     render() {
         const {updatedUsersToRender, isLoading, isError} = this.state;
 
-        if (isLoading) {
-            return <div>Loading...</div>
-        }
-        if (isError) {
-            return <div>Error...</div>
-        }
         return (
             <div>
                 {this.renderTableSearch()}
@@ -111,18 +104,17 @@ class UsersTable extends Component {
     }
 
     onSearchRadioClicked = (evnt) => {
-        console.log("evnt.target.value: " + evnt.target.value, "this.state.searchWord: " + this.state.searchWord)
         const newSearchBy = evnt.target.value
         const filteredUsers = this.filterUsersBy(this.state.searchWord, newSearchBy)
         this.setState({updatedUsersToRender: filteredUsers, searchBy: newSearchBy})
     }
 
     renderTableSearch() {
-        console.log("this.state.searchBy: " + this.state.searchBy)
         return (
             <div>
                 <input type="radio" id="name" name="filter-by" value="fullName"
-                       onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "fullName"}/>
+                       onChange={(evnt) => this.onSearchRadioClicked(evnt)}
+                       checked={this.state.searchBy === "fullName"}/>
                 <label htmlFor="name">Name</label>
                 <input type="radio" id="email" name="filter-by" value="email"
                        onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "email"}/>
@@ -130,7 +122,7 @@ class UsersTable extends Component {
                 <input type="radio" id="age" name="filter-by" value="age"
                        onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "age"}/>
                 <label htmlFor="age">Age</label>
-                
+
                 <input type="text" onChange={(evnt) => this.onSearchWordChange(evnt)}/>
             </div>
         )

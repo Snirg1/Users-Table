@@ -1,47 +1,75 @@
 table {
-  font-family: Arial, Helvetica, sans-serif;
-  /*border-collapse: collapse;*/
-  width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    /*border-collapse: collapse;*/
+    width: 100%;
 }
 
-img {
-  border-radius: 50%;
+Link {
+    color: inherit;
 }
+
+.profilePic {
+    border-radius: 50%;
+}
+
 table td,
 table th {
-  border: 1px solid #ddd;
-  padding: 8px;
+    border: 1px solid #ddd;
+    padding: 8px;
 }
 
 table tr:nth-child(even) {
-  background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 table tr {
-  text-align: center;
+    text-align: center;
 }
+
 table tr:hover {
-  background-color: #ddd;
+    background-color: #ddd;
 
 }
 
 table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: #04aa6d;
-  color: white;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #04aa6d;
+    color: white;
 }
 
-.currPage{
-  color: #04aa6d;
-  font-size: 100px;
-  position: absolute;
-  left: 30%;
+.currPage {
+    color: #04aa6d;
+    font-size: 100px;
+    position: absolute;
+    left: 30%;
 }
 
-.pagination-buttons{
-  position: absolute;
-  background-color: #04aa6d;
-  left: 50%;
+.pagination-buttons {
+    position: absolute;
+    background-color: #04aa6d;
+    left: 50%;
+}
+.map-container{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+
+.map-container iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
 }

@@ -1,30 +1,37 @@
 import React, {Component} from "react"
+import {BrowserRouter as Router,Redirect, useHistory, Link} from "react-router-dom";
 
 class UserDataRow extends Component {
 
     constructor(props) {
         super(props);
+        this.onUserDataRowClicked = props.onUserDataRowClicked
         this.state = {
             gender: props.userData.gender,
             fullName: props.userData.fullName,
             email: props.userData.email,
             age: props.userData.age,
             pictureUrl: props.userData.pictureUrl,
-            location: ''
+            location: props.userData.location,
         }
     }
 
+    redirectUserDetailsPage = () => {
+        // let history = useHistory();
+        window.location.href = `/1/L.Vidal`
+        // history.push(`/1/L.Vidal`);
+    }
 
     render() {
-        const {gender, fullName, email, age, pictureUrl } = this.state
+        const {gender, fullName, email, age, pictureUrl, location} = this.state
         return (
-            <tr>
-                <td>{gender}</td>
-                <td>{fullName}</td>
-                <td>{email}</td>
-                <td>{age}</td>
-                <td><img src={pictureUrl}/></td>
-            </tr>
+                <tr onClick={() => this.onUserDataRowClicked(this.state)}>
+                    <td>{gender}</td>
+                    <td>{fullName}</td>
+                    <td>{email}</td>
+                    <td>{age}</td>
+                    <td><img className="profilePic" src={pictureUrl}/></td>
+                </tr>
         )
     }
 }
