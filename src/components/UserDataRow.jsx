@@ -1,5 +1,4 @@
 import React, {Component} from "react"
-import {BrowserRouter as Router,Redirect, useHistory, Link} from "react-router-dom";
 
 class UserDataRow extends Component {
 
@@ -25,13 +24,13 @@ class UserDataRow extends Component {
     render() {
         const {gender, fullName, email, age, pictureUrl, location} = this.state
         return (
-                <tr onClick={() => this.onUserDataRowClicked(this.state)}>
-                    <td>{gender}</td>
-                    <td>{fullName}</td>
-                    <td>{email}</td>
-                    <td>{age}</td>
-                    <td><img className="profilePic" src={pictureUrl}/></td>
-                </tr>
+            <tr onClick={() => this.onUserDataRowClicked(this.state)}>
+                <td>{gender}</td>
+                <td>{fullName}</td>
+                <td>{email}</td>
+                <td>{age}</td>
+                <td><img className="profilePic" src={pictureUrl}/></td>
+            </tr>
         )
     }
 }

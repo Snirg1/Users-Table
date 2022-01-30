@@ -23,7 +23,7 @@ class userDetails extends Component {
     render() {
         return (
             <div>
-                <h2>User Details Page</h2>
+                <h2 className="user-details">User Details Page</h2>
                 <ul>
                     <li>{this.state.fullName}</li>
                     <li>{this.state.gender}</li>
