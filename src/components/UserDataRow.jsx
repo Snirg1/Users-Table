@@ -12,6 +12,7 @@ class UserDataRow extends Component {
             age: props.userData.age,
             pictureUrl: props.userData.pictureUrl,
             location: props.userData.location,
+            pageNum: props.userData.pageNum
         }
     }
 

@@ -17,7 +17,7 @@ class userDetails extends Component {
             email: props.userData.email,
             age: props.userData.age,
             pictureUrl: props.userData.pictureUrl,
-            location: location
+            location: location,
         }
     }
 

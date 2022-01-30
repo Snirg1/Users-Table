@@ -29,7 +29,7 @@ class App extends Component {
             this.fetchUsersByPageNum(this.state.currentPage)
     }
 
-    async fetchUsersByPageNum(pageNumber) {
+    async fetchUsersByPageNum(pageNumber, fullName = null) {
         this.fetchOnMount = false
         if (this.state.usersByPage[pageNumber - 1]) {
             this.setState({currentPage: pageNumber});
@@ -48,31 +48,37 @@ class App extends Component {
                             age: userRawData.dob.age,
                             pictureUrl: userRawData.picture.medium,
                             location: userRawData.location,
+                            pageNum: pageNumber
                         }
                     )
                 })
                 let newUsers = this.state.usersByPage
                 newUsers[pageNumber - 1] = usersObjects;
+                let userData = null;
+                if (fullName){
+                    userData = newUsers[pageNumber - 1].find(userData => userData.fullName === fullName)
+                }
                 this.setState({
                     usersByPage: newUsers, isLoading: false,
-                    currentPage: pageNumber
+                    currentPage: pageNumber, userDetails: userData
                 });
             } catch (error) {
-                //TODO: handle error
+                alert("Error: " + error)
             }
         }
     }
 
-    onUserDataRowClicked = (userData) => {
-        this.setState({userDetails: userData})
-    }
 
     setNextPage = () => {
-        this.fetchUsersByPageNum(this.state.currentPage + 1)
+        var originUrl = window.location.origin;
+        window.location.replace(`${originUrl}/${this.state.currentPage + 1}`)
+        // this.fetchUsersByPageNum(this.state.currentPage + 1)
     }
 
     setPrevPage = () => {
-        this.fetchUsersByPageNum(this.state.currentPage - 1)
+        var originUrl = window.location.origin;
+        window.location.replace(`${originUrl}/${this.state.currentPage - 1}`)
+        // this.fetchUsersByPageNum(this.state.currentPage - 1)
     }
 
     renderUsersTable = (currPage) => {
@@ -91,10 +97,17 @@ class App extends Component {
         this.setState({userDetails: null})
     }
 
-    // renderUserDetails = (pageNum, fullName) => {
-    //     const userData = this.state.usersByPage[pageNum].find((userData) => userData.fullName === fullName)
-    //     return (<UserDetails userData={userData}/>)
-    // }
+    renderUserDetails = (pageNum, fullName) => {
+        const userData = this.state.usersByPage[pageNum].find((userData) => userData.fullName === fullName)
+        return <UserDetails userData={userData} reRenderTable={this.reRenderTable}/>
+    }
+
+    onUserDataRowClicked = (userData) => {
+        var originUrl = window.location.origin;
+        window.location.replace(`${originUrl}/${userData.pageNum}/${userData.fullName}`)
+        // window.location.href = `./${userData.pageNum}/${userData.fullName}`
+        // this.setState({userDetails: userData})
+    }
 
     renderUiElements = () => {
         const userData = this.state.userDetails
@@ -111,11 +124,10 @@ class App extends Component {
             <Router>
                 <div className="App">
                     <Switch>
-                        {/*<Route path={"/:pageNum/:fullName"} render={(history) => {*/}
-                        {/*    const {pageNum, fullName} = history.match.params*/}
-                        {/*    this.renderUserDetails(pageNum, fullName)*/}
-                        {/*    //TODO : render user details from pageNum page and fullName*/}
-                        {/*}}/>*/}
+                        <Route path={"/:pageNum/:fullName"} render={(props) => {
+                            const {pageNum, fullName} = props.match.params
+                            this.fetchUsersByPageNum(pageNum, fullName)
+                        }}/>
                         <Route exact path={"/:pageNum"} render={(props) => {
                             const pageNum = parseInt(props.match.params.pageNum)
                             this.fetchUsersByPageNum(pageNum)
