@@ -16,14 +16,9 @@ class UserDataRow extends Component {
         }
     }
 
-    redirectUserDetailsPage = () => {
-        // let history = useHistory();
-        window.location.href = `/1/L.Vidal`
-        // history.push(`/1/L.Vidal`);
-    }
 
     render() {
-        const {gender, fullName, email, age, pictureUrl, location} = this.state
+        const {gender, fullName, email, age, pictureUrl} = this.state
         return (
             <tr onClick={() => this.onUserDataRowClicked(this.state)}>
                 <td>{gender}</td>

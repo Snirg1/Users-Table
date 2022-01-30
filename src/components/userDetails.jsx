@@ -24,15 +24,17 @@ class userDetails extends Component {
     render() {
         return (
             <div>
-                <h2 className="user-details">User Details Page</h2>
-                <ul>
+                <h2 className="user-details-header">User Details:</h2>
+                <img className="profilePicUserDetails" src={this.state.pictureUrl}/>
+
+                <ul className="user-details">
                     <li>{this.state.fullName}</li>
                     <li>{this.state.gender}</li>
                     <li>{this.state.fullName}</li>
                     <li>{this.state.email}</li>
                     <li>{this.state.age}</li>
-                    <li><img className="profilePic" src={this.state.pictureUrl}/></li>
                 </ul>
+                <button className="back-to-table-button" onClick={this.returnToTable}> Back to table </button>
 
                 <div style={{width: '100%', height: '400px'}}>
                     <GoogleMapReact
@@ -44,7 +46,6 @@ class userDetails extends Component {
                               lng={this.state.location.lng} className="dot"/>
                     </GoogleMapReact>
                 </div>
-                <button onClick={this.returnToTable}>Back</button>
             </div>
         );
     }

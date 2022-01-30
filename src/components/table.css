@@ -12,6 +12,13 @@ Link {
     border-radius: 50%;
 }
 
+.profilePicUserDetails {
+    border-radius: 50%;
+    position: absolute;
+    left: 25%;
+    width: 7%
+}
+
 table td,
 table th {
     border: 1px solid #ddd;
@@ -27,7 +34,7 @@ table tr {
 }
 
 table tr:hover {
-    background-color: #ddd;
+    background-color: #A13333;
 
 }
 
@@ -35,21 +42,22 @@ table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
-    background-color: #04aa6d;
+    background-color: #A13333;
     color: white;
 }
 
 .currPage {
-    color: #04aa6d;
-    font-size: 100px;
+    color: #A13333;
+    font-size: 50px;
     position: absolute;
-    left: 30%;
+    left: 40%;
 }
 
 .pagination-buttons {
     position: absolute;
-    background-color: #04aa6d;
-    left: 50%;
+    /*background-color: #A13333;*/
+    left: 45%;
+
 }
 .map-container{
     overflow:hidden;
@@ -67,9 +75,37 @@ table th {
 }
 
 .dot {
-    height: 15px;
-    width: 15px;
-    background-color: red;
+    height: 8px;
+    width: 8px;
+    background-color: #A13333;
     border-radius: 50%;
     display: inline-block;
+}
+
+.user-details {
+    color: #A13333;
+    font-size:20px;
+}
+
+.user-details-header {
+    color: #A13333;
+}
+
+.search-input{
+    position: absolute;
+    left: 50%;
+}
+
+.searching-input{
+    position: relative;
+    left: 2%;
+    size:20px;
+    width:100000px;
+}
+.search-header {
+    color: #A13333;
+
+}
+.back-to-table-button {
+    color: #A13333
 }

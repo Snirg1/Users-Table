@@ -40,8 +40,8 @@ class UsersTable extends Component {
 
     renderTableHeader = () => {
         return Object.keys(this.state.users[0]).map(attr => {
-            const header = this.headersMap[attr];
-            const onClickFn = ["gender", "pictureUrl"].includes(attr) ? () => {
+                const header = this.headersMap[attr];
+                const onClickFn = ["gender", "pictureUrl"].includes(attr) ? () => {
                 } : () => this.sortUsersByAttribute(attr)
                 if (header) {
                     return (<th key={attr} onClick={onClickFn}>{header} </th>)
@@ -58,7 +58,6 @@ class UsersTable extends Component {
                              userData={user}
                              onUserDataRowClicked={this.onUserDataRowClicked}
                 />
-                // we add the user.age to distinct between each component's key
             )
         });
         return newUsers;
@@ -77,7 +76,7 @@ class UsersTable extends Component {
     }
 
     render() {
-        const {updatedUsersToRender, isLoading, isError} = this.state;
+        const {updatedUsersToRender} = this.state;
 
         return (
             <div>
@@ -111,7 +110,8 @@ class UsersTable extends Component {
 
     renderTableSearch() {
         return (
-            <div>
+            <div className="searching-input">
+                <h2 className="search-header">Search:</h2>
                 <input type="radio" id="name" name="filter-by" value="fullName"
                        onChange={(evnt) => this.onSearchRadioClicked(evnt)}
                        checked={this.state.searchBy === "fullName"}/>
@@ -122,8 +122,9 @@ class UsersTable extends Component {
                 <input type="radio" id="age" name="filter-by" value="age"
                        onChange={(evnt) => this.onSearchRadioClicked(evnt)} checked={this.state.searchBy === "age"}/>
                 <label htmlFor="age">Age</label>
-
-                <input type="text" onChange={(evnt) => this.onSearchWordChange(evnt)}/>
+                <br/>
+                <input  type="text" onChange={(evnt) => this.onSearchWordChange(evnt)}/>
+                <br/><br/>
             </div>
         )
     }
@@ -142,8 +143,11 @@ class UsersTable extends Component {
 
                 {(this.currentPage > 1) ? (
                         <div>
+                            <br/>
                             {this.getPageButton("prev")}
+                            {"                                       "}
                             {this.getPageButton("next")}
+                            <br/>
                         </div>
                     ) :
                     (<div>

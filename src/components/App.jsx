@@ -68,17 +68,14 @@ class App extends Component {
         }
     }
 
-
     setNextPage = () => {
         var originUrl = window.location.origin;
         window.location.replace(`${originUrl}/${this.state.currentPage + 1}`)
-        // this.fetchUsersByPageNum(this.state.currentPage + 1)
     }
 
     setPrevPage = () => {
         var originUrl = window.location.origin;
         window.location.replace(`${originUrl}/${this.state.currentPage - 1}`)
-        // this.fetchUsersByPageNum(this.state.currentPage - 1)
     }
 
     renderUsersTable = (currPage) => {
@@ -94,19 +91,13 @@ class App extends Component {
     }
 
     reRenderTable = () => {
-        this.setState({userDetails: null})
-    }
-
-    renderUserDetails = (pageNum, fullName) => {
-        const userData = this.state.usersByPage[pageNum].find((userData) => userData.fullName === fullName)
-        return <UserDetails userData={userData} reRenderTable={this.reRenderTable}/>
+        var originUrl = window.location.origin;
+        window.location.replace(`${originUrl}/${this.state.currentPage}`)
     }
 
     onUserDataRowClicked = (userData) => {
         var originUrl = window.location.origin;
         window.location.replace(`${originUrl}/${userData.pageNum}/${userData.fullName}`)
-        // window.location.href = `./${userData.pageNum}/${userData.fullName}`
-        // this.setState({userDetails: userData})
     }
 
     renderUiElements = () => {
@@ -117,7 +108,6 @@ class App extends Component {
             return this.renderUsersTable(this.state.currentPage);
         }
     }
-
 
     render() {
         return this.state.isLoading ? (
