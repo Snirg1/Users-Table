@@ -5,6 +5,7 @@ class userDetails extends Component {
 
     constructor(props) {
         super(props);
+        this.returnToTable = props.reRenderTable
         const location = {
             lat: parseFloat(props.userData.location.coordinates.latitude),
             lng: parseFloat(props.userData.location.coordinates.longitude),
@@ -36,13 +37,14 @@ class userDetails extends Component {
                 <div style={{width: '100%', height: '400px'}}>
                     <GoogleMapReact
                         bootstrapURLKeys={{key: 'AIzaSyD8vJ4r7Ybqx4OhzfTfCaMeuUKPjrAPM0E'}}
-                        center={[this.state.location.lat,this.state.location.lng]}
+                        center={[this.state.location.lat, this.state.location.lng]}
                         defaultZoom={60}
                     >
                         <span lat={this.state.location.lat}
                               lng={this.state.location.lng} className="dot"/>
                     </GoogleMapReact>
                 </div>
+                <button onClick={this.returnToTable}>Back</button>
             </div>
         );
     }

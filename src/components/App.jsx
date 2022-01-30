@@ -82,8 +82,13 @@ class App extends Component {
                         onSetNextPage={this.setNextPage}
                         onSetPrevPage={this.setPrevPage}
                         onUserDataRowClicked={this.onUserDataRowClicked}
+                        reRenderTable={this.reRenderTable}
             />
         )
+    }
+
+    reRenderTable = () => {
+        this.setState({userDetails: null})
     }
 
     // renderUserDetails = (pageNum, fullName) => {
@@ -94,7 +99,7 @@ class App extends Component {
     renderUiElements = () => {
         const userData = this.state.userDetails
         if (userData){
-            return <UserDetails userData={userData}/>
+            return <UserDetails userData={userData} reRenderTable={this.reRenderTable}/>
         }else{
             return this.renderUsersTable(this.state.currentPage);
         }
