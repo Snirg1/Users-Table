@@ -70,12 +70,12 @@ class App extends Component {
 
     setNextPage = () => {
         var originUrl = window.location.origin;
-        window.location.replace(`${originUrl}/${this.state.currentPage + 1}`)
+        window.location.assign(`${originUrl}/${this.state.currentPage + 1}`)
     }
 
     setPrevPage = () => {
         var originUrl = window.location.origin;
-        window.location.replace(`${originUrl}/${this.state.currentPage - 1}`)
+        window.location.assign(`${originUrl}/${this.state.currentPage - 1}`)
     }
 
     renderUsersTable = (currPage) => {
@@ -92,12 +92,12 @@ class App extends Component {
 
     reRenderTable = () => {
         var originUrl = window.location.origin;
-        window.location.replace(`${originUrl}/${this.state.currentPage}`)
+        window.location.assign(`${originUrl}/${this.state.currentPage}`)
     }
 
     onUserDataRowClicked = (userData) => {
         var originUrl = window.location.origin;
-        window.location.replace(`${originUrl}/${userData.pageNum}/${userData.fullName}`)
+        window.location.assign(`${originUrl}/${userData.pageNum}/${userData.fullName}`)
     }
 
     renderUiElements = () => {
